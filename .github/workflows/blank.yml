@@ -104,17 +104,17 @@ jobs:
         make -j$(nproc --all) CC="ccache clang" O=out ARCH=arm64 CLANG_TRIPLE=aarch64-linux-gnu- CROSS_COMPILE=aarch64-linux-android- CROSS_COMPILE_ARM32=arm-linux-androideabi-
                 
 
-    - name: 制作Anykernel3卡刷包
+    - name: 制作Anykernel3
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
         cp android-kernel/out/arch/arm64/boot/Image.gz-dtb android-kernel/Anykernel3/
         
     
     
-    - name: 上传 Anykernel3 卡刷包
+    - name: 上传Anykernel3
       uses: actions/upload-artifact@v4
       with:
-        name: 安卓P-${{ github.event.inputs.device }}-卡刷包
+        name: 安卓P-卡刷包-${{ github.event.inputs.device }}
         path: kernel_workspace/android-kernel/Anykernel3/*
         
 
