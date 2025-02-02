@@ -73,7 +73,7 @@ jobs:
 
 
     - name: 集成 ksu
-      if: ${{ github.event.inputs.ksu }} == 'YES'
+      if: env.{ github.event.inputs.ksu } == 'YES'
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         rm -rf KernelSU
