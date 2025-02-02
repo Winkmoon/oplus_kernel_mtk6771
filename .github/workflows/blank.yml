@@ -116,7 +116,7 @@ jobs:
     - name: 上传卡刷包
       uses: actions/upload-artifact@v4
       with:
-        name: 安卓P-${{ github.event.inputs.device }}-卡刷包
+        name: android P-${{ github.event.inputs.device }}-Anykernel3
         path: kernel_workspace/android-kernel/out/arch/arm64/boot/anykernel3/*
         
 
