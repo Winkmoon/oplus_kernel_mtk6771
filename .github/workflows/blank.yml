@@ -73,12 +73,12 @@ jobs:
 
 
     - name: 集成 ksu
+      if: github.event.inputs.ksu == 'YES'
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         rm -rf KernelSU
-        if ${{ github.event.inputs.device }} == YES
         curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v0.9.5
-        fi
+ 
 
                
     - name: 设置ccache缓存
