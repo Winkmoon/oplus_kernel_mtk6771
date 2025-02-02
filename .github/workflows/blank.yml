@@ -108,9 +108,8 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
         cp android-kernel/out/arch/arm64/boot/Image.gz-dtb android-kernel/Anykernel3/
-        cp -a android-kernel/Anykernel3 android-kernel/out/arch/arm64/boot/
-        cp -a android-kernel/Anykernel3 android-kernel/卡刷包
-        zip -r 安卓P-${{ github.event.inputs.device }}-卡刷包.zip android-kernel/out/arch/arm64/boot/Anykernel3
+        cp -a android-kernel/Anykernel3 android-kernel/out/arch/arm64/boot/anykernel3
+        zip -r 安卓P-${{ github.event.inputs.device }}-卡刷包.zip android-kernel/out/arch/arm64/boot/anykernel3
         
 
     
@@ -118,7 +117,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: 安卓P-${{ github.event.inputs.device }}-卡刷包
-        path: kernel_workspace/android-kernel/卡刷包/*
+        path: kernel_workspace/android-kernel/out/arch/arm64/boot/anykernel3/*
         
 
     - name: 上传编译内核
