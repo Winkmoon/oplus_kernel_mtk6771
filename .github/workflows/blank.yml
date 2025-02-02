@@ -110,16 +110,11 @@ jobs:
         cp android-kernel/out/arch/arm64/boot/Image.gz-dtb android-kernel/Anykernel3/
         
 
-    - name: 上传
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ github.event.inputs.device }}-Android-P
-        path: kernel_workspace/android-kernel/Android P
     
-    - name: 上传Anykernel3
+    - name: 上传卡刷包
       uses: actions/upload-artifact@v4
       with:
-        name: 安卓P-${{ github.event.inputs.device }}-卡刷包
+        name: 安卓9-${{ github.event.inputs.device }}-卡刷包
         path: kernel_workspace/android-kernel/Anykernel3/*
         
 
