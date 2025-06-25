@@ -68,9 +68,7 @@ jobs:
         
         # 启用必要的内核配置
         CONFIG_FILE="arch/arm64/configs/oppo6771_${{ github.event.inputs.device }}_defconfig"
-        echo "CONFIG_KPROBES=y" >> $CONFIG_FILE
         echo "CONFIG_HAVE_KPROBES=y" >> $CONFIG_FILE
-        echo "CONFIG_KPROBE_EVENTS=y" >> $CONFIG_FILE
         echo "CONFIG_MODULES=y" >> $CONFIG_FILE
         echo "CONFIG_OVERLAY_FS=y" >> $CONFIG_FILE
         echo "CONFIG_KSU=y" >> $CONFIG_FILE
