@@ -60,13 +60,11 @@ jobs:
         git clone https://github.com/Winkmoon/PCAM10_KERNEL/ android-kernel
         cd android-kernel
 
-    # ============== 修改后的 KernelSU 集成步骤 ==============
-    - name: 集成 KernelSU (仅配置)
+    - name: 集成 KernelSU
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
-        
-        # 下载 KernelSU 源码但不自动应用补丁
-        git clone --depth=1 --branch=v0.9.5 https://github.com/tiann/KernelSU.git KernelSU
+        rm -rf KernelSU
+        curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v0.9.5
         
         # 启用必要的内核配置
         CONFIG_FILE="arch/arm64/configs/oppo6771_${{ github.event.inputs.device }}_defconfig"
@@ -76,11 +74,6 @@ jobs:
         echo "CONFIG_MODULES=y" >> $CONFIG_FILE
         echo "CONFIG_OVERLAY_FS=y" >> $CONFIG_FILE
         echo "CONFIG_KSU=y" >> $CONFIG_FILE
-        
-        # 添加 KernelSU 到内核构建系统（不自动应用补丁）
-        echo 'obj-y += KernelSU/kernel/' >> drivers/Makefile
-        echo 'ccflags-y += -I$(srctree)/drivers/KernelSU/kernel/include' >> drivers/Makefile
-    # ============== KernelSU 集成结束 ==============
                
     - name: 设置ccache缓存
       uses: hendrikmuhs/ccache-action@v1.2
