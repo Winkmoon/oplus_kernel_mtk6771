@@ -67,7 +67,7 @@ jobs:
     - name: 下载内核源码
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
-        git clone https://github.com/Winkmoon/PCAM10_KERNEL/ main
+        git clone https://github.com/Winkmoon/PCAM10_KERNEL/ android-kernel
         cd android-kernel
 
 
