@@ -104,26 +104,21 @@ jobs:
         make -j$(nproc --all) CC="ccache clang" O=out ARCH=arm64 CLANG_TRIPLE=aarch64-linux-gnu- CROSS_COMPILE=aarch64-linux-android- CROSS_COMPILE_ARM32=arm-linux-androideabi-
                 
 
-    - name: 制作Anykernel3卡刷包
+    - name: 验证内核镜像
       run: |
-        cd $GITHUB_WORKSPACE/kernel_workspace
-        mkdir -p android-kernel/out/anykernel3
-        cp -a android-kernel/Anykernel3/* android-kernel/out/anykernel3/
-        cp android-kernel/out/arch/arm64/boot/Image.gz-dtb android-kernel/out/anykernel3/
-        cd android-kernel/out/anykernel3
-        zip -r ../安卓P-${{ github.event.inputs.device }}-卡刷包.zip .
+        FILE_PATH="$GITHUB_WORKSPACE/kernel_workspace/android-kernel/out/arch/arm64/boot/Image.gz-dtb"
+        if [ -f "$FILE_PATH" ]; then
+        echo "内核镜像存在，大小: $(du -h $FILE_PATH | cut -f1)"
+        else
+        echo "错误：内核镜像未生成!"
+        ls -la "$GITHUB_WORKSPACE/kernel_workspace/android-kernel/out/arch/arm64/boot"
+        exit 1
+        fi
         
 
     
-    - name: 上传卡刷包
+    - name: 上传内核镜像
       uses: actions/upload-artifact@v4
       with:
-        name: mtk6771-${{ github.event.inputs.device }}-Anykernel3
-        path: kernel_workspace/android-kernel/out/*
-        
-
-    #- name: 上传编译内核
-      #uses: actions/upload-artifact@v4
-      #with:
-        #name: mtk6771-${{ github.event.inputs.device }}-kernel
-        #path: kernel_workspace/android-kernel/out/arch/arm64/boot/*
+        name: kernel-${{ github.event.inputs.device }}
+        path: kernel_workspace/android-kernel/out/arch/arm64/boot/Image.gz-dtb
