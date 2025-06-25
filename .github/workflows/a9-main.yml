@@ -1,4 +1,4 @@
-name: 编译 mtk6771 安卓P 机型内核
+name: 编译 mtk6771 安卓P a9内核
 
 on:
   workflow_dispatch:
