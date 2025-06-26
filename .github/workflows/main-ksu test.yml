@@ -1,4 +1,4 @@
-                              name: 编译 mtk6771 安卓P a9内核 (集成 KernelSU - 无手动 Hook)
+name: 编译 mtk6771 安卓P a9内核 (集成 KernelSU - 无手动 Hook)
 
 on:
   workflow_dispatch:
