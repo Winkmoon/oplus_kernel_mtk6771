@@ -55,7 +55,7 @@ jobs:
         git clone -q --depth=1 https://github.com/wu17481748/android_prebuilts_clang_host_linux-x86_clang-4691093 clang-aosp
     
     - name: 下载内核源码
-      run: |
+      运行： |
         cd $GITHUB_WORKSPACE/kernel_workspace
         git clone https://github.com/Winkmoon/PCAM10_KERNEL/ android-kernel
         cd android-kernel
@@ -76,22 +76,22 @@ jobs:
         echo "CONFIG_KSU=y" >> $CONFIG_FILE
                
     - name: 设置ccache缓存
-      uses: hendrikmuhs/ccache-action@v1.2
-      with:
-        key: build-kernel-mido-kernel
-        max-size: 2G
+      使用：hendrikmuhs/ccache-action@v1.2
+      和：
+        密钥：构建内核-mido内核
+        最大尺寸：2G
 
-    - name: 切换python2.7
-      run: |
+    - 名称: 切换python2.7
+      运行： |
        sudo rm /bin/python
        sudo ln -s /bin/python2.7 /bin/python
  
     - name: 开始编译内核
-      run: |
+      运行： |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         export TARGET_PRODUCT=full_oppo6771_${{ github.event.inputs.device }}
         export OPPO_TARGET_DEVICE=oppo6771_${{ github.event.inputs.device }}
-        export PATH=$GITHUB_WORKSPACE/kernel_workspace/clang-aosp/bin:$GITHUB_WORKSPACE/kernel_workspace/gcc64/bin:$GITHUB_WORKSPACE/kernel_workspace/gcc32/bin:$PATH
+        export PATH=$GITHUB_WORKSPACE/kernel_workspace/clang-aosp/bin:$GITHUB_WORKSPACE(kernel_workspace/gcc64/bin:$GITHUB_WORKSPACE(kernel_workspace/gcc32/bin:$PATH
         export KBUILD_BUILD_HOST=ShirokoNeko酷安@欣然酱_official
         export KBUILD_BUILD_USER=ShirokoNeko-KSU
         
@@ -101,35 +101,35 @@ jobs:
         # 编译内核并记录日志
         make -j$(($(nproc --all)-1)) \
          CC="ccache clang" \
-         O=out \
-         ARCH=arm64 \
-         CLANG_TRIPLE=aarch64-linux-gnu- \
-         CROSS_COMPILE=aarch64-linux-android- \
-         CROSS_COMPILE_ARM32=arm-linux-androideabi- \
-         V=1 \
+         O=输出
+         架构=arm64
+         CLANG_TRIPLE=aarch64-linux-gnu-
+         CROSS_COMPILE=aarch64-linux-android-
+         CROSS_COMPILE_ARM32=arm-linux-androideabi-
+         V=1
          KCFLAGS="-fno-pie"
                 
 
-    - name: 验证内核镜像
-      run: |
+    - 名称: 验证内核镜像
+      运行： |
         FILE_PATH="$GITHUB_WORKSPACE/kernel_workspace/android-kernel/out/arch/arm64/boot/Image.gz-dtb"
         if [ -f "$FILE_PATH" ]; then
         echo "内核镜像存在，大小: $(du -h $FILE_PATH | cut -f1)"
-        else
+        否则
         echo "错误：内核镜像未生成!"
-        ls -la "$GITHUB_WORKSPACE/kernel_workspace/android-kernel/out/arch/arm64/boot"
-        exit 1
-        fi
+        ls -la  "$GITHUB_WORKSPACE/kernel_workspace/android-kernel/out/arch/arm64/boot"
+        退出 1
+        输入：        fi
         
-    - name: 上传内核镜像
-      uses: actions/upload-artifact@v4
-      with:
+    - 名称: 上传内核镜像
+      使用：actions/upload-artifact@v4
+      和：
         name: kernel-${{ github.event.inputs.device }}-ksu
-        path: kernel_workspace/android-kernel/out/arch/arm64/boot/Image.gz-dtb
+        路径: 内核工作区/android-kernel/out/arch/arm64/boot/Image.gz-dtb
         
     - name: 上传编译日志（如果失败）
-      if: ${{ failure() }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-log-${{ github.event.inputs.device }}
-        path: $GITHUB_WORKSPACE/kernel_workspace/android-kernel/build.log
+      if: ${{ 失败() }}
+      使用：actions/upload-artifact@v4
+      和：
+        名称：构建日志-${{ github.event.inputs.device }}
+        路径: $GITHUB_WORKSPACE/kernel_workspace/android-kernel/build.log
