@@ -89,7 +89,7 @@ jobs:
         export TARGET_PRODUCT=full_oppo6771_${{ github.event.inputs.device }}
         export OPPO_TARGET_DEVICE=oppo6771_${{ github.event.inputs.device }}
         export PATH=$GITHUB_WORKSPACE/kernel_workspace/clang-aosp/bin:$GITHUB_WORKSPACE/kernel_workspace/gcc64/bin:$GITHUB_WORKSPACE/kernel_workspace/gcc32/bin:$PATH
-        export KBUILD_BUILD_HOST=ShirokoNeko酷安@欣然酱_official
+        export KBUILD_BUILD_HOST=ShirokoNeko酷安@欣然酱_official-感谢酷安@云彩之枫
         export KBUILD_BUILD_USER=ShirokoNeko-KSU
         
         # 编译配置
