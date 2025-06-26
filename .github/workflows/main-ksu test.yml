@@ -76,7 +76,7 @@ jobs:
       uses: hendrikmuhs/ccache-action@v1.2
       with:
         key: build-kernel-mido-kernel
-        max-size: 2G
+        max-size: 4G
 
     - name: 切换python2.7
       run: |
