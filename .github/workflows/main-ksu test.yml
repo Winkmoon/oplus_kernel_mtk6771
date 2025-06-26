@@ -1,4 +1,4 @@
-name: 编译 mtk6771 安卓P a9内核 (集成 KernelSU - 无手动 Hook)
+                              name: 编译 mtk6771 安卓P a9内核 (集成 KernelSU - 无手动 Hook)
 
 on:
   workflow_dispatch:
@@ -68,6 +68,8 @@ jobs:
         
         # 启用必要的内核配置
         CONFIG_FILE="arch/arm64/configs/oppo6771_${{ github.event.inputs.device }}_defconfig"
+        echo "CONFIG_MODULE_SIG=n" >> $CONFIG_FILE
+        echo "CONFIG_MODULE_SIG_ALL=n" >> $CONFIG_FILE
         echo "CONFIG_HAVE_KPROBES=y" >> $CONFIG_FILE
         echo "CONFIG_MODULES=y" >> $CONFIG_FILE
         echo "CONFIG_OVERLAY_FS=y" >> $CONFIG_FILE
@@ -97,7 +99,15 @@ jobs:
         make -s -j$(nproc --all) O=out ARCH=arm64 oppo6771_${{ github.event.inputs.device }}_defconfig
         
         # 编译内核并记录日志
-        make -j$(nproc --all) CC="ccache clang" O=out ARCH=arm64 CLANG_TRIPLE=aarch64-linux-gnu- CROSS_COMPILE=aarch64-linux-android- CROSS_COMPILE_ARM32=arm-linux-androideabi- 2>&1 | tee build.log
+        make -j$(($(nproc --all)-1)) \
+         CC="ccache clang" \
+         O=out \
+         ARCH=arm64 \
+         CLANG_TRIPLE=aarch64-linux-gnu- \
+         CROSS_COMPILE=aarch64-linux-android- \
+         CROSS_COMPILE_ARM32=arm-linux-androideabi- \
+         V=1 \
+         KCFLAGS="-fno-pie"
                 
 
     - name: 验证内核镜像
