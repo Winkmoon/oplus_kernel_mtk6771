@@ -55,7 +55,7 @@ jobs:
         git clone -q --depth=1 https://github.com/wu17481748/android_prebuilts_clang_host_linux-x86_clang-4691093 clang-aosp
     
     - name: 下载内核源码
-      运行： |
+      run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
         git clone https://github.com/Winkmoon/PCAM10_KERNEL/ android-kernel
         cd android-kernel
