@@ -12,7 +12,7 @@ on:
         - '17197'
         - '17331'
         - '18011'
-        - '18161-a9'
+        - '18161'
         - '18311'
         - '18531'
         - '19091'
@@ -76,7 +76,7 @@ jobs:
         echo "CONFIG_MODULES=y" >> $CONFIG_FILE
         echo "CONFIG_OVERLAY_FS=y" >> $CONFIG_FILE
         echo "CONFIG_KSU=y" >> $CONFIG_FILE
-        #echo "CONFIG_KSU_MANUAL_HOOK=y" >> $CONFIG_FILE
+        echo "CONFIG_KSU_MANUAL_HOOK=y" >> $CONFIG_FILE
                
     - name: 设置ccache缓存
       uses: hendrikmuhs/ccache-action@v1.2
@@ -94,9 +94,9 @@ jobs:
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         export TARGET_PRODUCT=full_oppo6771_${{ github.event.inputs.device }}
         export OPPO_TARGET_DEVICE=oppo6771_${{ github.event.inputs.device }}
+        export PATH=$GITHUB_WORKSPACE/kernel_workspace/clang-aosp/bin:$GITHUB_WORKSPACE/kernel_workspace/gcc64/bin:$GITHUB_WORKSPACE/kernel_workspace/gcc32/bin:$PATH
         export KBUILD_BUILD_HOST=酷安@Xinran_StarBai
         export KBUILD_BUILD_USER=ShirokoNeko-KSU-Xinran_StarBai
-        export PATH=$GITHUB_WORKSPACE/kernel_workspace/clang-aosp/bin:$GITHUB_WORKSPACE/kernel_workspace/gcc64/bin:$GITHUB_WORKSPACE/kernel_workspace/gcc32/bin:$PATH
         
         # 编译配置
         make -s -j$(nproc --all) O=out ARCH=arm64 oppo6771_${{ github.event.inputs.device }}_defconfig
