@@ -12,7 +12,7 @@ on:
         - '17197'
         - '17331'
         - '18011'
-        - '18161'
+        - '18161-a9'
         - '18311'
         - '18531'
         - '19091'
@@ -62,7 +62,12 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         rm -rf KernelSU
-        curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v0.9.5
+        curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s nongki
+        KSU_VERSION=$(expr $(/usr/bin/git rev-list --count main) "+" 10700)
+        echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
+        echo "ksuver=$KSU_VERSION" >> $GITHUB_OUTPUT
+        export KSU_VERSION=$KSU_VERSION
+        sed -i "s/DKSU_VERSION=12800/DKSU_VERSION=$KSU_VERSION/" kernel/Makefile
         
         # 启用必要的内核配置
         CONFIG_FILE="arch/arm64/configs/oppo6771_${{ github.event.inputs.device }}_defconfig"
@@ -71,6 +76,7 @@ jobs:
         echo "CONFIG_MODULES=y" >> $CONFIG_FILE
         echo "CONFIG_OVERLAY_FS=y" >> $CONFIG_FILE
         echo "CONFIG_KSU=y" >> $CONFIG_FILE
+        echo "CONFIG_KSU_MANUAL_HOOK=y" >> $CONFIG_FILE
                
     - name: 设置ccache缓存
       uses: hendrikmuhs/ccache-action@v1.2
@@ -88,9 +94,9 @@ jobs:
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         export TARGET_PRODUCT=full_oppo6771_${{ github.event.inputs.device }}
         export OPPO_TARGET_DEVICE=oppo6771_${{ github.event.inputs.device }}
+        export KBUILD_BUILD_HOST=酷安@Xinran_StarBai
+        export KBUILD_BUILD_USER=ShirokoNeko-KSU-Xinran_StarBai
         export PATH=$GITHUB_WORKSPACE/kernel_workspace/clang-aosp/bin:$GITHUB_WORKSPACE/kernel_workspace/gcc64/bin:$GITHUB_WORKSPACE/kernel_workspace/gcc32/bin:$PATH
-        export KBUILD_BUILD_HOST=酷安@欣然酱_official感谢酷安@云彩之枫
-        export KBUILD_BUILD_USER=ShirokoNeko-KSU
         
         # 编译配置
         make -s -j$(nproc --all) O=out ARCH=arm64 oppo6771_${{ github.event.inputs.device }}_defconfig
@@ -117,15 +123,39 @@ jobs:
         exit 1
         fi
         
-    - name: 上传内核镜像
+    - name: 克隆 AnyKernel3 并打包
+      run: |
+          cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel/out/arch/arm64/boot
+          git clone https://github.com/Winkmoon/AnyKernel3 --depth=1
+          rm -rf ./AnyKernel3/.git
+          cd AnyKernel3
+          cp $GITHUB_WORKSPACE/kernel_workspace/android-kernel/out/arch/arm64/boot/Image.gz-dtb ./Image.gz-dtb
+          if [ ! -f ./Image.gz-dtb ]; then
+            exit 1
+          fi
+          if [[ -n "${{ github.event.inputs.kernel_suffix }}" ]]; then
+            zip -r ../AnyKernel3_SukiSU_${{ env.KSUVER }}_${{ env.KERNEL_VERSION }}_A11_${{ github.event.inputs.kernel_suffix }}.zip ./*
+          else
+            zip -r ../AnyKernel3_SukiSU_${{ env.KSUVER }}_${{ env.KERNEL_VERSION }}_A11_${{ env.KERNEL_NAME }}.zip ./*
+          fi
+      
+    - name: 上传 ZIP 工件
       uses: actions/upload-artifact@v4
       with:
-        name: kernel-${{ github.event.inputs.device }}-ksu
-        path: kernel_workspace/android-kernel/out/arch/arm64/boot/Image.gz-dtb
-        
-    - name: 上传编译日志（如果失败）
-      if: ${{ failure() }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-log-${{ github.event.inputs.device }}
-        path: $GITHUB_WORKSPACE/kernel_workspace/android-kernel/build.log
+          name: Kernel_ZIP_Artifacts
+          path: ${{ github.workspace }}/kernel_workspace/common/*.zip
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      actions: read
+      
+    steps:
+      - name: 下载 ZIP 工件
+        uses: actions/download-artifact@v4
+        with:
+          name: Kernel_ZIP_Artifacts
+          path: ./release_zips
