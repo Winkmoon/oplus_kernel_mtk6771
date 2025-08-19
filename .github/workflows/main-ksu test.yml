@@ -148,7 +148,7 @@ jobs:
     - name: 上传 ZIP
       uses: actions/upload-artifact@v4
       with:
-          name: Kernel_ZIP_Artifacts
+          name: AnyKernel3_SukiSU_${{ env.KSUVER }}_${{ env.KERNEL_VERSION }}_A11_${{ env.KERNEL_NAME }}
           path: kernel_workspace/android-kernel/out/arch/arm64/boot/*.zip
 
   release:
@@ -163,5 +163,5 @@ jobs:
       - name: 下载 ZIP 工件
         uses: actions/download-artifact@v4
         with:
-          name: Kernel_ZIP_Artifacts
+          name: AnyKernel3_SukiSU_${{ env.KSUVER }}_${{ env.KERNEL_VERSION }}_A11_${{ env.KERNEL_NAME }}
           path: ./release_zips
