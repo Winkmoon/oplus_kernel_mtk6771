@@ -66,6 +66,9 @@ jobs:
         KSU_VERSION=$(expr $(/usr/bin/git rev-list --count main) "+" 10700)
         echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
         echo "ksuver=$KSU_VERSION" >> $GITHUB_OUTPUT
+        echo "KERNEL_VERSION=androidP" >> $GITHUB_ENV
+        echo "KERNEL_NAME=mtk6771" >> $GITHUB_ENV
+
         export KSU_VERSION=$KSU_VERSION
         sed -i "s/DKSU_VERSION=12800/DKSU_VERSION=$KSU_VERSION/" kernel/Makefile
         
