@@ -109,7 +109,6 @@ jobs:
          CLANG_TRIPLE=aarch64-linux-gnu- \
          CROSS_COMPILE=aarch64-linux-android- \
          CROSS_COMPILE_ARM32=arm-linux-androideabi- \
-         V=1 \
          KCFLAGS="-fno-pie"
          
     - name: 验证内核镜像
@@ -143,7 +142,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
           name: Kernel_ZIP_Artifacts
-          path: ${{ github.workspace }}/kernel_workspace/common/*.zip
+          path: $GITHUB_WORKSPACE/kernel_workspace/android-kernel/out/arch/arm64/boot/*.zip
 
   release:
     needs: build
