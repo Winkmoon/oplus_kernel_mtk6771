@@ -139,7 +139,7 @@ jobs:
             zip -r ../AnyKernel3_SukiSU_${{ env.KSUVER }}_${{ env.KERNEL_VERSION }}_A11_${{ env.KERNEL_NAME }}.zip ./*
           fi
       
-    - name: 上传 ZIP 工件
+    - name: 上传 ZIP
       uses: actions/upload-artifact@v4
       with:
           name: Kernel_ZIP_Artifacts
