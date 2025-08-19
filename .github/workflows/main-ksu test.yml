@@ -63,7 +63,7 @@ jobs:
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         rm -rf KernelSU
         curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s nongki
-        KSU_VERSION=$(expr $(/usr/bin/git rev-list --count main) "+" 10700)
+        KSU_VERSION=$(expr $(/usr/bin/git rev-list --count nongki) "+" 10700)
         echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
         echo "ksuver=$KSU_VERSION" >> $GITHUB_OUTPUT
         echo "KERNEL_VERSION=androidP" >> $GITHUB_ENV
