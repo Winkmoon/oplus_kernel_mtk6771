@@ -58,14 +58,10 @@ jobs:
         cd $GITHUB_WORKSPACE/kernel_workspace
         git clone https://github.com/Winkmoon/PCAM10_KERNEL/ android-kernel
         cd android-kernel
-    - name: 集成 KernelSU
+    - name: KernelSU
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         rm -rf KernelSU
-        curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s main
-        KSU_VERSION=$(expr $(/usr/bin/git rev-list --count main) "+" 10700)
-        echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
-        echo "ksuver=$KSU_VERSION" >> $GITHUB_OUTPUT
         echo "KERNEL_VERSION=androidP" >> $GITHUB_ENV
         echo "KERNEL_NAME=mtk6771" >> $GITHUB_ENV
 
@@ -82,8 +78,7 @@ jobs:
         echo "CONFIG_KPROBES=y" >> $CONFIG_FILE
         echo "CONFIG_HAVE_KPROBES=y" >> $CONFIG_FILE
         echo "CONFIG_OVERLAY_FS=y" >> $CONFIG_FILE
-        echo "CONFIG_KSU=y" >> $CONFIG_FILE
-        echo "CONFIG_KSU_MANUAL_HOOK=y" >> $CONFIG_FILE
+
         #不知道
         echo "CONFIG_MT7601U=y" >> $CONFIG_FILE
         echo "CONFIG_WL_MEDIATEK=y" >> $CONFIG_FILE
